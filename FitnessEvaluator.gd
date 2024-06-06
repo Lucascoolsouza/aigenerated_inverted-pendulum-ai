@@ -2,6 +2,9 @@ extends NeuralNetworkMain
 classname FitnessEvaluator
 
 static func evaluate(neural_network, pendulum, cart):
+    if not pendulum or not cart:
+        return 0
+
     var fitness = 0
     var score = 0
     var distance = 0
@@ -18,19 +21,30 @@ static func evaluate(neural_network, pendulum, cart):
     return fitness
 
 static func calculate_fitness(score, distance, pendulum):
-    return score / (1 + abs(pendulum.rotation) + distance)
+    if pendulum:
+        return score / (1 + abs(pendulum.rotation) + distance)
+    else:
+        return 0
 
 static func get_inputs(pendulum, cart):
-    return [
-        pendulum.rotation,
-        pendulum.global_position.direction_to(cart.global_position).x,
-        pendulum.global_position.direction_to(cart.global_position).y,
-        pendulum.angular_velocity,
-        cart.linear_velocity.x
-    ]
+    if pendulum and cart:
+        return [
+            pendulum.rotation,
+            pendulum.global_position.direction_to(cart.global_position).x,
+            pendulum.global_position.direction_to(cart.global_position).y,
+            pendulum.angular_velocity,
+            cart.linear_velocity.x
+        ]
+    else:
+        return []
 
 static func apply_output(output, cart):
-    cart.linear_velocity.x = output
+    if cart:
+        cart.linear_velocity.x = output
 
 static func is_balanced(pendulum):
-    return abs(pendulum.rotation) < Config.THRESHOLD
+    if pendulum:
+        return abs(pendulum.rotation) < Config.THRESHOLD
+    else:
+        return false
+

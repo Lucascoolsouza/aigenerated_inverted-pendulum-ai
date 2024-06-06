@@ -5,6 +5,7 @@ var individuals = []
 var elite = []
 
 func _init(size, model, config):
+    assert(size > 0, "Population size must be greater than 0")
     for i in range(size):
         var individual = {
             "neural_network": NeuralNetwork.new(config),
@@ -22,14 +23,14 @@ func evolve():
 
 func select_elite():
     individuals.sort_custom(func(a, b): return a["fitness"] > b["fitness"])
-    elite = individuals.slice(0, Config.ELITE_COUNT - 1)
+    elite = individuals.slice(0, min(Config.ELITE_COUNT, individuals.size()))
 
 func reproduce():
     var new_individuals = []
     
     for i in range(Config.POPULATION_SIZE):
-        var parent1 = elite[randi() % Config.ELITE_COUNT]
-        var parent2 = elite[randi() % Config.ELITE_COUNT]
+        var parent1 = elite[randi() % elite.size()]
+        var parent2 = elite[randi() % elite.size()]
         
         var child_nn = parent1["neural_network"].crossover(parent2["neural_network"])
         child_nn.mutate(Config.MUTATION_RATE)
@@ -43,9 +44,12 @@ func reproduce():
     individuals = new_individuals
 
 func get_best_individual():
+    assert(individuals.size() > 0, "No individuals in population")
     return individuals[0]
 
 func load_best_model(model):
+    if not model:
+        return
     var best_nn = NeuralNetwork.new(Config.config)
     best_nn.weights1 = model.weights1
     best_nn.weights2 = model.weights2
@@ -56,6 +60,9 @@ func load_best_model(model):
     individuals[0] = best_individual
 
 func visualize(node):
+    if not node:
+        return
+
     var best_individual = get_best_individual()
     var weights1 = best_individual["neural_network"].weights1
     var weights2 = best_individual["neural_network"].weights2
@@ -67,7 +74,5 @@ func visualize(node):
             node.draw_rect(Rect2(j * 20, i * 20, 20, 20), color)
     
     # Visualize weights2
-    for i in range(weights2.size()):
-        for j in range(weights2[i].size()):
-            var color = Color.from_hsv(0.5 + weights2[i][j] * 0.5, 1, 1)
             node.draw_rect(Rect2(j * 20, (i + weights1.size()) * 20, 20, 20), color)
+

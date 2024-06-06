@@ -1,4 +1,5 @@
-extends Node
+extends NeuralNetworkMain
+classname FitnessEvaluator
 
 static func evaluate(neural_network, pendulum, cart):
     var fitness = 0

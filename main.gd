@@ -1,8 +1,9 @@
 extends Node2D
+classname NeuralNetworkMain
 
-@export var pendulum: Node2D
-@export var cart: Node2D
-@export var model: Resource
+@export var pendulum: Node2D #PLACEHOLDER
+@export var cart: Node2D #PLACEHOLDER
+@export var model: Resource #PLACEHOLDER
 @export var enable_visualization: bool = false
 
 var population = []

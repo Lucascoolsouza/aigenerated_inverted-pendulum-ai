@@ -1,4 +1,5 @@
-extends Node
+extends NeuralNetworkMain
+classname Population
 
 var individuals = []
 var elite = []

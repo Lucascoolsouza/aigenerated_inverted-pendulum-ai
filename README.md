@@ -1,5 +1,6 @@
 # Inverted Pendulum AI
 
+Note: This GIT IS AI GENERATED !
 This project demonstrates the use of a genetic algorithm to train a neural network controller for balancing an inverted pendulum on a cart. The AI learns to control the cart's movement in order to keep the pendulum upright.
 
 ## Table of Contents
